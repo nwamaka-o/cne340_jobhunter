@@ -120,15 +120,17 @@ def jobhunt(cursor):
 def add_or_delete_job(jobpage, cursor):
     # Add your code here to parse the job page
     for jobdetails in jobpage['jobs']:  # EXTRACTS EACH JOB FROM THE JOB LIST. It errored out until I specified jobs. This is because it needs to look at the jobs dictionary from the API. https://careerkarma.com/blog/python-typeerror-int-object-is-not-iterable/
-        # Add in your code here to check if the job already exists in the DB
-        check_if_job_exists(cursor, jobdetails)
-        is_job_found = len(
-        cursor.fetchall()) > 0  # https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
-        if is_job_found:
+        title = jobdetails['title']
+        company = jobdetails['company_name']
 
+        # Add in your code here to check if the job already exists in the DB
+        is_job_found = check_if_job_exists(cursor, jobdetails)
+        
+        if is_job_found:
+            print(f"Job already exists: {title} at {company}")
         else:
-            # INSERT JOB
-            # Add in your code here to notify the user of a new posting. This code will notify the new user
+            add_new_job(cursor, jobdetails)
+            print(f"New job added: {title} at {company}")
 
 
 
