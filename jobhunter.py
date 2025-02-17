@@ -70,9 +70,17 @@ def add_new_job(cursor, jobdetails):
 
 # Check if new job
 def check_if_job_exists(cursor, jobdetails):
-    ##Add your code here
-    query = "UPDATE"
-    return query_sql(cursor, query)
+    query = "SELECT * FROM jobs WHERE Job_id = %s"
+
+    cursor.execute(query, (jobdetails['id'],))  # Execute safely with parameterized value
+    result = cursor.fetchone()  # Fetch the result
+
+    if result:
+        print(f"Job exists: {jobdetails['title']} at {jobdetails['company_name']}")
+    else:
+        print(f"Job does NOT exist: {jobdetails['title']} at {jobdetails['company_name']}")
+
+    return result is not None
 
 # Deletes job
 def delete_job(cursor, jobdetails):
