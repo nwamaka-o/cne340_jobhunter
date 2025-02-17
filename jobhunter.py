@@ -92,6 +92,13 @@ def delete_job(cursor, jobdetails):
     print(f"Job deleted: {jobdetails['id']}")  
     return query_sql(cursor, query)
 
+# Deletes jobs older than 14 days
+def delete_old_jobs(cursor):
+    query = "DELETE FROM jobs WHERE Created_at < (CURDATE() - INTERVAL 14 DAY)"
+    cursor.execute(query)
+    deleted_count = cursor.rowcount  # Get number of affected rows
+    print(f"{deleted_count} old jobs deleted")
+
 
 # Grab new jobs from a website, Parses JSON code and inserts the data into a list of dictionaries do not need to edit
 def fetch_new_jobs():
