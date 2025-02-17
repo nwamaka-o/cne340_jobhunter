@@ -43,12 +43,29 @@ def query_sql(cursor, query):
 # Add a new job
 def add_new_job(cursor, jobdetails):
     # extract all required columns
+    job_id = jobdetails['id']
+    company = jobdetails['company_name']
+    created_at = jobdetails['publication_date'][0:10]
+    url = jobdetails['url']
+    title = jobdetails['title']
     description = html2text.html2text(jobdetails['description'])
-    date = jobdetails['publication_date'][0:10]
-    query = cursor.execute("INSERT INTO jobs( Description, Created_at " ") "
-               "VALUES(%s,%s)", (  description, date))
+
+    # Insert the data into the table
+    query = '''
+        INSERT INTO jobs (Job_id, company, Created_at, url, Title, Description)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        '''
      # %s is what is needed for Mysqlconnector as SQLite3 uses ? the Mysqlconnector uses %s
-    return query_sql(cursor, query)
+    
+    try:
+        cursor.execute(query, (job_id, company, created_at, url, title, description))  # Execute safely
+        print(f"New job added: {title} at {company}")
+
+    except mysql.connector.IntegrityError:
+        print(f"Job already exists: {title} at {company}")
+
+    except mysql.connector.Error as err:
+        print(f"Error inserting job: {err}")
 
 
 # Check if new job
