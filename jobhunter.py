@@ -22,8 +22,15 @@ def create_tables(cursor):
     # Creates table
     # Must set Title to CHARSET utf8 unicode Source: http://mysql.rjweb.org/doc.php/charcoll.
     # Python is in latin-1 and error (Incorrect string value: '\xE2\x80\xAFAbi...') will occur if Description is not in unicode format due to the json data
-    cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (id INT PRIMARY KEY auto_increment, Job_id varchar(50) , 
-    company varchar (300), Created_at DATE, url varchar(30000), Title LONGBLOB, Description LONGBLOB ); ''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (
+        id INT PRIMARY KEY auto_increment, 
+        Job_id varchar(50) UNIQUE, 
+        company varchar (300), 
+        Created_at DATE, 
+        url varchar(3000), 
+        Title TEXT, 
+        Description TEXT
+    ); ''')
 
 
 # Query the database.
