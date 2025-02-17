@@ -84,8 +84,12 @@ def check_if_job_exists(cursor, jobdetails):
 
 # Deletes job
 def delete_job(cursor, jobdetails):
-    ##Add your code here
-    query = "UPDATE"
+    query = "DELETE FROM jobs WHERE Job_id = %s"
+
+    # Execute using query_sql() but also pass the job ID
+    cursor = query_sql(cursor, query)
+    cursor.execute(query, (jobdetails['id'],))  # Ensure safe parameterized execution
+    print(f"Job deleted: {jobdetails['id']}")  
     return query_sql(cursor, query)
 
 
